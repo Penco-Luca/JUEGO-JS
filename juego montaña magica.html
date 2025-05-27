@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+alert("bienvenido a la montaña magica");
+
+let energia = 100;
+let salud = 100;
+let mana = 50;
+let puntos = 0;
+let tieneTesoro = false;
+let inventario = [];
+
+function estado() {
+  return "energia: " + energia + "\nsalud: " + salud + "\nmana: " + mana + "\npuntos: " + puntos;
+}
+
+function mostrarInventario() {
+  if (inventario.length === 0) {
+    return "no tenes nada en el inventario.";
+  } else {
+    return "tenés: " + inventario.join(", ");
+  }
+}
+
+let cam1 = prompt("primer camino:\n1. subir por rocas\n2. entrar al bosque\n3. esperar ayuda");
+if (cam1 == "1") {
+  alert("te caiste. perdes 30 de energia.");
+  energia -= 30;
+} else if (cam1 == "2") {
+  alert("te ataco un lobo. perdes 20 de energía y conseguis una garra.");
+  energia -= 20;
+  inventario.push("garra");
+  puntos += 10;
+} else if (cam1 == "3") {
+  alert("esperaste y un viajero te dio comida. +10 de energia y una cuerda.");
+  energia += 10;
+  inventario.push("cuerda"); // AHORA Si se consigue cuerda
+  puntos += 5;
+} else {
+  alert("no hiciste nada. perdes 10 de energia.");
+  energia -= 10;
+}
+
+if (energia > 0) {
+  let cam2 = prompt("segundo camino:\n1. entrar a una cueva\n2. rodear la montaña");
+  if (cam2 == "1") {
+    let suerte = Math.random();
+    if (suerte > 0.5) {
+      alert("encontraste un tesoro escondido.");
+      tieneTesoro = true;
+      puntos += 50;
+    } else {
+      alert("un monstruo te golpeo. perdes 30 de salud y encontras una piedra magica.");
+      salud -= 30;
+      inventario.push("piedra mágica");
+      puntos += 20;
+    }
+  } else if (cam2 == "2") {
+    alert("el camino fue largo. perdes 10 de energía.");
+    energia -= 10;
+    puntos += 5;
+  }
+}
+
+alert("mitad del juego...\n" + mostrarInventario());
+
+if (energia > 0 && salud > 0) {
+  let cam3 = prompt("te encontras con un sabio:\n1. pedir pocion de salud\n2. pedir mana\n3. no pedir nada");
+  if (cam3 == "1") {
+    salud += 30;
+    inventario.push("frasco vacio");
+    puntos += 10;
+  } else if (cam3 == "2") {
+    mana += 30;
+    inventario.push("frasco vacio");
+    puntos += 10;
+  } else {
+    alert("el sabio se va.");
+    puntos -= 5;
+  }
+}
+
+if (energia > 0 && salud > 0) {
+  let cam4 = prompt("hay un puente colgante:\n1. cruzar rapido\n2. reforzar con cuerda\n3. buscar otro camino");
+  if (cam4 == "1") {
+    alert("te raspaste cruzando. perdes 20 de energía.");
+    energia -= 20;
+    puntos += 10;
+  } else if (cam4 == "2") {
+    if (inventario.includes("cuerda")) {
+      alert("reforzaste el puente. cruzas sin problema.");
+      puntos += 20;
+    } else {
+      alert("no tenias cuerda, te caiste, perdes 20 de salud.");
+      salud -= 20;
+    }
+  } else {
+    alert("fue mas largo pero seguro. perdes 10 de energía.");
+    energia -= 10;
+    puntos += 5;
+  }
+}
+
+if (energia > 0 && salud > 0 && inventario.length > 0) {
+  let usar = prompt("queres usar un objeto? escribi el nombre exacto o 'no'");
+  if (inventario.includes(usar)) {
+    alert("usaste: " + usar);
+    puntos += 10;
+    inventario.splice(inventario.indexOf(usar), 1);
+  } else if (usar !== "no") {
+    alert("no tenes eso.");
+  }
+}
+
+let final = "";
+if (energia <= 0 || salud <= 0) {
+  final = "fin del juego: te quedaste sin energia o salud.";
+} else if (tieneTesoro && puntos >= 80) {
+  final = "final bueno: encontraste el tesoro y tenes muchos puntos.";
+} else if (tieneTesoro) {
+  final = "final neutral: tenes el tesoro pero te fue más o menos.";
+} else if (puntos >= 60) {
+  final = "final decente: no tenes el tesoro, pero hiciste buen trabajo.";
+} else {
+  final = "final malo: no cumpliste la mision.";
+}
+
+alert(final + "\n\n" + estado() + "\n\n" + mostrarinventario());
+</script>
+</body>
+</html>
